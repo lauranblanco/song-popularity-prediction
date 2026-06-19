@@ -29,12 +29,12 @@ Los equipos de A&R y marketing necesitan estimar, *antes* de invertir en promoci
 
 ## 🔬 Metodología
 
-1. **EDA** ([`01_eda.ipynb`](notebooks/01_eda.ipynb)) — distribución de popularidad, correlaciones, dominancia del género.
-2. **Feature engineering** ([`02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb)) — dedup por `track_id` (anti-leakage), interacciones de audio, prolificidad del artista, validación de hipótesis con Last.fm.
-3. **Modelado** ([`03_modeling.ipynb`](notebooks/03_modeling.ipynb)) — Logistic Regression → Random Forest → LightGBM, con *target encoding* cross-fitted de género/artista (anti-leakage).
-4. **Explicabilidad** — SHAP (summary + waterfall).
-5. **Análisis de sesgo** — AUC-ROC por género + experimento *cold-start* (sin historial de artista).
-6. **App** ([`app.py`](app.py)) — Streamlit: inputs manuales → probabilidad de hit + SHAP waterfall + aviso de sesgo.
+1. **EDA** ([`01_eda.ipynb`](notebooks/01_eda.ipynb)): distribución de popularidad, correlaciones, dominancia del género.
+2. **Feature engineering** ([`02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb)): dedup por `track_id` (anti-leakage), interacciones de audio, prolificidad del artista, validación de hipótesis con Last.fm.
+3. **Modelado** ([`03_modeling.ipynb`](notebooks/03_modeling.ipynb)): Logistic Regression → Random Forest → LightGBM, con *target encoding* cross-fitted de género/artista (anti-leakage).
+4. **Explicabilidad**: SHAP (summary + waterfall).
+5. **Análisis de sesgo**: AUC-ROC por género + experimento *cold-start* (sin historial de artista).
+6. **App** ([`app.py`](app.py)): Streamlit: inputs manuales → probabilidad de hit + SHAP waterfall + aviso de sesgo.
 
 ---
 
@@ -120,7 +120,7 @@ La app solo necesita `app.py`, `src/`, `app_data/metadata.json`, `models/best_mo
 
 ## 📌 Estado
 
-✅ **Modelo y app funcionales** — pendiente únicamente el deploy a Streamlit Cloud.
+✅ **Modelo y app funcionales**. Puede entrar a la app por medio de este link: https://song-popularity-prediction-3vpu3x9czymwxyzvp3b3dr.streamlit.app/
 
 ---
 
