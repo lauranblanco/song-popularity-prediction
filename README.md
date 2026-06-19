@@ -32,12 +32,12 @@ A&R and marketing teams need to estimate, *before* investing in promotion, which
 
 ## 🔬 Methodology
 
-1. **EDA** ([`01_eda.ipynb`](notebooks/01_eda.ipynb)) — popularity distribution, correlations, dominance of genre.
-2. **Feature engineering** ([`02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb)) — dedup by `track_id` (anti-leakage), audio interactions, artist prolificness, Last.fm hypothesis validation.
-3. **Modeling** ([`03_modeling.ipynb`](notebooks/03_modeling.ipynb)) — Logistic Regression → Random Forest → LightGBM, with cross-fitted *target encoding* of genre/artist (anti-leakage).
-4. **Explainability** — SHAP (summary + waterfall).
-5. **Bias analysis** — per-genre AUC-ROC + a *cold-start* experiment (no artist history).
-6. **App** ([`app.py`](app.py)) — Streamlit: manual inputs → hit probability + SHAP waterfall + bias caveat.
+1. **EDA** ([`01_eda.ipynb`](notebooks/01_eda.ipynb)): popularity distribution, correlations, dominance of genre.
+2. **Feature engineering** ([`02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb)): dedup by `track_id` (anti-leakage), audio interactions, artist prolificness, Last.fm hypothesis validation.
+3. **Modeling** ([`03_modeling.ipynb`](notebooks/03_modeling.ipynb)): Logistic Regression → Random Forest → LightGBM, with cross-fitted *target encoding* of genre/artist (anti-leakage).
+4. **Explainability**: SHAP (summary + waterfall).
+5. **Bias analysis**: per-genre AUC-ROC + a *cold-start* experiment (no artist history).
+6. **App** ([`app.py`](app.py)): Streamlit: manual inputs → hit probability + SHAP waterfall + bias caveat.
 
 ---
 
@@ -117,7 +117,7 @@ The app only needs `app.py`, `src/`, `app_data/metadata.json`, `models/best_mode
 
 ## 📌 Status
 
-✅ **Model and app working** — only the Streamlit Cloud deployment is pending.
+✅ **Model and app working**. You can access the app with this link: https://song-popularity-prediction-3vpu3x9czymwxyzvp3b3dr.streamlit.app/.
 
 ---
 
