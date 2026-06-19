@@ -1,125 +1,124 @@
 # 🎯 Song Popularity Prediction Model
 
-Modelo de machine learning que predice si una canción alcanzará el **top 25% de popularidad** a partir de sus *audio features*, género e historial del artista. Incluye explicabilidad con **SHAP**, un análisis de **sesgo por género** y una **app en Streamlit** para testear canciones nuevas.
+🌐 [Leer en Español](README.es.md)
 
-> Proyecto 3 del portafolio de Music Analytics de **Laura Blanco**. Orientado a equipos de **A&R, marketing musical y plataformas de streaming**: demuestra construcción de herramientas de soporte a decisiones, no solo análisis descriptivo.
+**Author:** Laura Blanco | **Stack:** Python · Pandas · Scikit-learn · LightGBM · SHAP · Streamlit · Joblib · requests
+**Live demo:** _pending deployment_
 
----
+A machine learning model that predicts whether a song will reach the **top 25% of popularity**, based on its *audio features*, genre and artist history. It includes **SHAP** explainability, a **genre-bias analysis**, and a **Streamlit app** to test new songs.
 
-## 🎵 Problema de negocio
-
-Los equipos de A&R y marketing necesitan estimar, *antes* de invertir en promoción, qué canciones tienen mayor probabilidad de volverse populares. Se aborda como **clasificación binaria**:
-
-> Dada una canción (audio features + género + artista), ¿llegará al cuartil superior de popularidad (top 25%)?
+> Project 3 of **Laura Blanco**'s Music Analytics portfolio. Aimed at **A&R, music marketing and streaming** teams: it demonstrates building decision-support tools, not just descriptive analysis.
 
 ---
 
-## 📊 Datos
+## 🎵 Business problem
 
-| Fuente | Uso | Tamaño |
+A&R and marketing teams need to estimate, *before* investing in promotion, which songs are most likely to become popular. This is framed as **binary classification**:
+
+> Given a song (audio features + genre + artist), will it reach the top quartile of popularity (top 25%)?
+
+---
+
+## 📊 Data
+
+| Source | Use | Size |
 |---|---|---|
-| **Kaggle — Spotify Tracks Dataset** | Audio features + popularidad + género (base del modelo) | ~114k canciones, 114 géneros |
-| **Last.fm API** (`requests`) | Enriquecimiento sobre una **muestra** de artistas: listener counts como validación de la señal de popularidad del artista | 300 artistas top |
+| **Kaggle — Spotify Tracks Dataset** | Audio features + popularity + genre (model base) | ~114k songs, 114 genres |
+| **Last.fm API** (`requests`) | Enrichment over a **sample** of artists: listener counts to validate the artist-popularity signal | top 300 artists |
 
-> El dataset de Kaggle es estático. El enriquecimiento con Last.fm se aplica sobre una muestra por límites de rate de la API.
-
----
-
-## 🔬 Metodología
-
-1. **EDA** ([`01_eda.ipynb`](notebooks/01_eda.ipynb)) — distribución de popularidad, correlaciones, dominancia del género.
-2. **Feature engineering** ([`02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb)) — dedup por `track_id` (anti-leakage), interacciones de audio, prolificidad del artista, validación de hipótesis con Last.fm.
-3. **Modelado** ([`03_modeling.ipynb`](notebooks/03_modeling.ipynb)) — Logistic Regression → Random Forest → LightGBM, con *target encoding* cross-fitted de género/artista (anti-leakage).
-4. **Explicabilidad** — SHAP (summary + waterfall).
-5. **Análisis de sesgo** — AUC-ROC por género + experimento *cold-start* (sin historial de artista).
-6. **App** ([`app.py`](app.py)) — Streamlit: inputs manuales → probabilidad de hit + SHAP waterfall + aviso de sesgo.
+> The Kaggle dataset is static. Last.fm enrichment is applied to a sample due to API rate limits.
 
 ---
 
-## 📈 Resultados clave
+## 🔬 Methodology
 
-- **LightGBM: AUC-ROC ≈ 0.92** en test (meta > 0.78 ✅), F1 ≈ 0.73.
-- **SHAP:** la popularidad es sobre todo un atributo del **artista y el género**; las audio features son secundarias.
-- **Cold-start** (sin historial de artista): AUC ≈ 0.87 — la herramienta sigue siendo útil para artistas nuevos.
-- **Sesgo documentado:** el modelo falla específicamente en **géneros brasileños/regionales** (pagode, samba, mpb… AUC ≈ 0.45–0.62), mientras que el latino global (reggaetón, salsa) se predice casi perfecto. Causa: `popularity` es un score *global* que subrepresenta el éxito regional.
-
----
-
-## 🛠️ Stack
-
-`Python · Pandas · Scikit-learn · LightGBM · SHAP · Streamlit · Joblib · requests`
+1. **EDA** ([`01_eda.ipynb`](notebooks/01_eda.ipynb)) — popularity distribution, correlations, dominance of genre.
+2. **Feature engineering** ([`02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb)) — dedup by `track_id` (anti-leakage), audio interactions, artist prolificness, Last.fm hypothesis validation.
+3. **Modeling** ([`03_modeling.ipynb`](notebooks/03_modeling.ipynb)) — Logistic Regression → Random Forest → LightGBM, with cross-fitted *target encoding* of genre/artist (anti-leakage).
+4. **Explainability** — SHAP (summary + waterfall).
+5. **Bias analysis** — per-genre AUC-ROC + a *cold-start* experiment (no artist history).
+6. **App** ([`app.py`](app.py)) — Streamlit: manual inputs → hit probability + SHAP waterfall + bias caveat.
 
 ---
 
-## 📁 Estructura
+## 📈 Key results
+
+- **LightGBM: AUC-ROC ≈ 0.92** on test (target > 0.78 ✅), F1 ≈ 0.73.
+- **SHAP:** popularity is mostly an attribute of the **artist and the genre**; audio features are secondary.
+- **Cold-start** (no artist history): AUC ≈ 0.87 — the tool stays useful for brand-new artists.
+- **Documented bias:** the model fails specifically on **Brazilian/regional genres** (pagode, samba, mpb… AUC ≈ 0.45–0.62), while globalized Latin genres (reggaeton, salsa) predict almost perfectly. Cause: `popularity` is a *global* score that under-counts regional success.
+
+---
+
+## 📁 Structure
 
 ```
 song-popularity-prediction/
 ├── data/
-│   ├── raw/              # dataset Kaggle (no versionado)
-│   └── processed/        # features + stats Last.fm (no versionado)
+│   ├── raw/              # Kaggle dataset (not versioned)
+│   └── processed/        # features + Last.fm stats (not versioned)
 ├── notebooks/
 │   ├── 01_eda.ipynb
 │   ├── 02_feature_engineering.ipynb
 │   └── 03_modeling.ipynb
 ├── src/
-│   ├── features.py           # limpieza + feature engineering
-│   ├── lastfm_enrich.py      # enriquecimiento Last.fm (muestra)
-│   ├── model.py              # pipeline, modelos, evaluación, sesgo
-│   ├── predict.py            # inferencia + SHAP para la app
-│   └── build_app_metadata.py # genera app_data/metadata.json
-├── app_data/metadata.json    # géneros, artistas y defaults (versionado)
-├── models/best_model.joblib  # LightGBM serializado (versionado)
-├── reports/                  # 13 figuras exportadas
-├── app.py                    # app Streamlit
+│   ├── features.py           # cleaning + feature engineering
+│   ├── lastfm_enrich.py      # Last.fm enrichment (sample)
+│   ├── model.py              # pipeline, models, evaluation, bias
+│   ├── predict.py            # inference + SHAP for the app
+│   └── build_app_metadata.py # generates app_data/metadata.json
+├── app_data/metadata.json    # genres, artists and defaults (versioned)
+├── models/best_model.joblib  # serialized LightGBM (versioned)
+├── reports/                  # 13 exported figures
+├── app.py                    # Streamlit app
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## 🚀 Cómo ejecutar
+## 🚀 How to run
 
 ```bash
 python -m venv .venv
 .venv\Scripts\activate                 # Windows
 pip install -r requirements.txt
 
-# Reproducir el pipeline (opcional; requiere el dataset en data/raw/)
-python src/features.py                 # genera data/processed/tracks_features.csv
-python src/model.py                    # entrena y guarda models/best_model.joblib
+# Reproduce the pipeline (optional; requires the dataset in data/raw/)
+python src/features.py                 # builds data/processed/tracks_features.csv
+python src/model.py                    # trains and saves models/best_model.joblib
 
-# Lanzar la app
+# Launch the app
 streamlit run app.py
 ```
 
-Para el enriquecimiento Last.fm: `cp .env.example .env` y añade tu `LASTFM_API_KEY`.
+For Last.fm enrichment: `cp .env.example .env` and add your `LASTFM_API_KEY`.
 
 ---
 
-## ☁️ Deploy en Streamlit Cloud
+## ☁️ Deploy on Streamlit Cloud
 
-La app solo necesita `app.py`, `src/`, `app_data/metadata.json`, `models/best_model.joblib` y `requirements.txt` (todos versionados). Pasos:
+The app only needs `app.py`, `src/`, `app_data/metadata.json`, `models/best_model.joblib` and `requirements.txt` (all versioned). Steps:
 
-1. Push del repo a GitHub.
-2. En [share.streamlit.io](https://share.streamlit.io): *New app* → seleccionar el repo → main file `app.py`.
-3. Deploy. (No requiere secrets: el modelo y los metadatos viajan en el repo.)
-
----
-
-## 🎯 KPIs de éxito
-
-- [x] AUC-ROC > 0.78 en test set → **0.92**
-- [x] SHAP plots de las features más importantes
-- [x] Sección de limitaciones y sesgos documentada
-- [ ] App deployada en Streamlit Cloud *(lista localmente; pendiente push + deploy)*
+1. Push the repo to GitHub.
+2. On [share.streamlit.io](https://share.streamlit.io): *New app* → select the repo → main file `app.py`.
+3. Deploy. (No secrets required: the model and metadata ship in the repo.)
 
 ---
 
-## 📌 Estado
+## 🎯 Success KPIs
 
-✅ **Modelo y app funcionales** — pendiente únicamente el deploy a Streamlit Cloud.
+- [x] AUC-ROC > 0.78 on the test set → **0.92**
+- [x] SHAP plots of the most important features
+- [x] Limitations and bias section documented
+- [ ] App deployed on Streamlit Cloud *(ready locally; push + deploy pending)*
 
 ---
 
-*Parte del portafolio de Music Analytics · Laura Blanco · 2026*
+## 📌 Status
+
+✅ **Model and app working** — only the Streamlit Cloud deployment is pending.
+
+---
+
+*Part of the Music Analytics portfolio · Laura Blanco · 2026*
