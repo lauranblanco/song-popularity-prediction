@@ -1,0 +1,12 @@
+.env
+.venv/
+data/raw/
+data/processed/
+models/*.joblib
+models/*.pkl
+# Keep the production model + app metadata for Streamlit Cloud deployment
+!models/best_model.joblib
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+reports/*.pdf
